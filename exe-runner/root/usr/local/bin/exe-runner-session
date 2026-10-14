@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Started by the desktop session. Prepares Wine, then keeps a file browser open
+# on the uploads folder so .exe files can be double-tapped to run.
+export WINEDEBUG=-all
+
+mkdir -p "$HOME/Desktop"
+
+if [ ! -d "$HOME/.wine" ]; then
+  xmessage -center -timeout 600 "Setting up Windows support for the first time. This takes a few minutes..." &
+  msg=$!
+  wine wineboot -u
+  wineserver -w
+  kill "$msg" 2>/dev/null
+fi
+
+# Uploaded files land in ~/Desktop; show them in Windows as drive D:.
+ln -sfn "$HOME/Desktop" "$HOME/.wine/dosdevices/d:"
+
+# Keep a file window open on D: so .exe files can be double-tapped to run.
+while true; do
+  wine explorer 'D:\'
+  wineserver -w
+  sleep 1
+done

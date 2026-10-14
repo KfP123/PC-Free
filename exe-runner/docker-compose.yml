@@ -1,0 +1,32 @@
+services:
+  exe-runner:
+    build: .
+    image: exe-runner
+    container_name: exe-runner
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "Etc/UTC"
+      CUSTOM_USER: ${EXE_RUNNER_USER:-me}
+      PASSWORD: ${EXE_RUNNER_PASSWORD:?Set EXE_RUNNER_PASSWORD}
+      # Readable text on a phone: send a phone-sized desktop and stretch it.
+      SELKIES_USE_CSS_SCALING: "true"
+      DISABLE_IPV6: "true"
+    volumes:
+      - ./data:/config
+    ports:
+      # Only reachable from the server itself; Caddy publishes it over HTTPS.
+      - "127.0.0.1:3000:3000"
+    shm_size: "1gb"
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    command: caddy reverse-proxy --from ${EXE_RUNNER_HOST:?Set EXE_RUNNER_HOST} --to exe-runner:3000
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy-data:/data
+    restart: unless-stopped
