@@ -26,7 +26,7 @@ RUN set -eux; \
     # Pre-install the Wine Mono version this Wine expects, so .NET programs work
     # and first-time setup doesn't stop at a download prompt.
     appwiz="$(find /usr/lib -name appwiz.cpl -path '*wine*' | head -n1)"; \
-    mono_ver="$(grep -aoE 'wine-mono-[0-9]+\.[0-9]+\.[0-9]+' "$appwiz" | head -n1 | sed 's/wine-mono-//')"; \
+    mono_ver="$(tr -d '\000' < "$appwiz" | grep -aoE 'wine-mono-[0-9]+\.[0-9]+\.[0-9]+' | head -n1 | sed 's/wine-mono-//')"; \
     mono_arch="x86"; [ "$TARGETARCH" = "arm64" ] && mono_arch="arm64"; \
     mkdir -p /usr/share/wine/mono; \
     curl -fsSL "https://dl.winehq.org/wine/wine-mono/${mono_ver}/wine-mono-${mono_ver}-${mono_arch}.tar.xz" \
