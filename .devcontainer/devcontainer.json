@@ -1,17 +1,13 @@
 {
-  "name": "PC-Free (Windows in the browser)",
+  "name": "PC-Free: EXE Runner",
   // GitHub's default Codespaces image. It ships with Docker already running.
   "image": "mcr.microsoft.com/devcontainers/universal:2",
-  // Windows needs 16 GB of RAM to run comfortably, so ask for the 4-core machine.
-  "hostRequirements": {
-    "cpus": 4
-  },
-  // Runs on every start (the Windows disk lives in /tmp, which Codespaces clears on stop).
-  "postStartCommand": "bash .devcontainer/start-windows.sh",
-  "forwardPorts": [8006],
+  // Builds (first time only) and starts EXE Runner on every Codespace start.
+  "postStartCommand": "bash exe-runner/codespaces-start.sh",
+  "forwardPorts": [3000],
   "portsAttributes": {
-    "8006": {
-      "label": "Windows desktop",
+    "3000": {
+      "label": "EXE Runner",
       "onAutoForward": "notify"
     }
   }

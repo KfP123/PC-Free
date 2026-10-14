@@ -14,7 +14,7 @@ Run a complete Windows 10 environment in your browser using Docker and GitHub Co
 
 ---
 
-> 📱 **On an iPhone or iPad?** See [IPHONE.md](./IPHONE.md). Creating a Codespace now installs and starts Windows automatically.
+> 📱 **On an iPhone or iPad?** See [IPHONE.md](./IPHONE.md). Creating a Codespace starts EXE Runner, which runs Windows `.exe` files in your browser.
 
 ## What is PC-Free?
 

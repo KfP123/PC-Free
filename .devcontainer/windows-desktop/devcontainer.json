@@ -1,0 +1,18 @@
+{
+  "name": "PC-Free: full Windows 10 desktop",
+  // GitHub's default Codespaces image. It ships with Docker already running.
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  // Windows needs 16 GB of RAM to run comfortably, so ask for the 4-core machine.
+  "hostRequirements": {
+    "cpus": 4
+  },
+  // Runs on every start (the Windows disk lives in /tmp, which Codespaces clears on stop).
+  "postStartCommand": "bash .devcontainer/start-windows.sh",
+  "forwardPorts": [8006],
+  "portsAttributes": {
+    "8006": {
+      "label": "Windows desktop",
+      "onAutoForward": "notify"
+    }
+  }
+}

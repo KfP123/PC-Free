@@ -11,6 +11,8 @@ services:
       PASSWORD: ${EXE_RUNNER_PASSWORD:?Set EXE_RUNNER_PASSWORD}
       # Readable text on a phone: send a phone-sized desktop and stretch it.
       SELKIES_USE_CSS_SCALING: "true"
+      # JPEG streaming works in every browser; H.264 needs WebCodecs support.
+      SELKIES_ENCODER: "jpeg"
       DISABLE_IPV6: "true"
     volumes:
       - ./data:/config:Z
