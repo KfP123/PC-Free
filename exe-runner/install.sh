@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Installs EXE Runner on a fresh Ubuntu server (made for Oracle Cloud's free
-# Ampere A1 machine). Run as root, with EXE_RUNNER_PASSWORD set. Safe to re-run:
+# Installs EXE Runner on a fresh Ubuntu or Oracle Linux server (made for Oracle
+# Cloud's free Ampere A1 machine). Run as root, with EXE_RUNNER_PASSWORD set. Safe to re-run:
 # it updates to the latest version and keeps your files.
 set -euo pipefail
 
@@ -15,17 +15,33 @@ case "$EXE_RUNNER_PASSWORD" in
 esac
 
 echo "==> Installing Docker and git"
-apt-get update -q
-apt-get install -y -q git curl
-command -v docker >/dev/null || curl -fsSL https://get.docker.com | sh
+if command -v apt-get >/dev/null; then
+  apt-get update -q
+  apt-get install -y -q git curl
+  command -v docker >/dev/null || curl -fsSL https://get.docker.com | sh
+else
+  # Oracle Linux (or another RHEL-like system).
+  dnf install -y -q git curl dnf-plugins-core
+  if ! command -v docker >/dev/null; then
+    dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    dnf install -y -q --allowerasing docker-ce docker-ce-cli containerd.io docker-compose-plugin
+  fi
+fi
+systemctl enable --now docker
 
 echo "==> Opening ports 80 and 443 in the server's firewall"
-# Oracle's Ubuntu images reject everything except SSH by default.
-for port in 80 443; do
-  iptables -C INPUT -p tcp --dport "$port" -j ACCEPT 2>/dev/null \
-    || iptables -I INPUT 1 -p tcp --dport "$port" -j ACCEPT
-done
-command -v netfilter-persistent >/dev/null && netfilter-persistent save || true
+if systemctl is-active --quiet firewalld; then
+  # Oracle Linux images use firewalld.
+  firewall-cmd -q --permanent --add-service=http --add-service=https
+  firewall-cmd -q --reload
+else
+  # Oracle's Ubuntu images reject everything except SSH by default.
+  for port in 80 443; do
+    iptables -C INPUT -p tcp --dport "$port" -j ACCEPT 2>/dev/null \
+      || iptables -I INPUT 1 -p tcp --dport "$port" -j ACCEPT
+  done
+  command -v netfilter-persistent >/dev/null && netfilter-persistent save || true
+fi
 
 echo "==> Getting the latest EXE Runner"
 if [ -d "$DIR/.git" ]; then

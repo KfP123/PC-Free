@@ -22,7 +22,8 @@ In the Oracle Cloud console, tap **☰ → Compute → Instances → Create inst
 
 1. **Name:** `exe-runner`
 2. **Image and shape:**
-   - **Change image** → **Ubuntu** → **Canonical Ubuntu 24.04** (not the "Minimal" one).
+   - **Change image** → **Ubuntu** → **Canonical Ubuntu 24.04** (not the "Minimal" one). If Ubuntu
+     isn't offered, **Oracle Linux 9** works too.
    - **Change shape** → **Ampere** → **VM.Standard.A1.Flex**, then set **4 OCPUs** and **24 GB memory**.
 3. **Networking:** keep the defaults, and make sure **Assign a public IPv4 address** is on.
 4. **SSH keys:** choose **Generate a key pair for me** and save the private key to Files. You
