@@ -8,6 +8,10 @@ for _ in $(seq 1 60); do
   docker info >/dev/null 2>&1 && break
   sleep 2
 done
+if ! docker info >/dev/null 2>&1; then
+  echo "Docker is not available in this Codespace, so Windows can't start." >&2
+  exit 1
+fi
 
 # /tmp sits on the Codespace's large temporary disk; /workspaces is too small for Windows.
 mkdir -p /tmp/windows-storage shared

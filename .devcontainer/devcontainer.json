@@ -1,9 +1,7 @@
 {
   "name": "PC-Free (Windows in the browser)",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
-  },
+  // GitHub's default Codespaces image. It ships with Docker already running.
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
   // Windows needs 16 GB of RAM to run comfortably, so ask for the 4-core machine.
   "hostRequirements": {
     "cpus": 4
