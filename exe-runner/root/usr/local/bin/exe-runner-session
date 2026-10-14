@@ -8,8 +8,7 @@ mkdir -p "$HOME/Desktop"
 if [ ! -d "$HOME/.wine" ]; then
   xmessage -center -timeout 600 "Setting up Windows support for the first time. This takes a few minutes..." &
   msg=$!
-  # WINEDEBUG=wininet works around Hangover's broken wine-mono auto-download.
-  WINEDEBUG=wininet wine wineboot -u
+  wine wineboot -u
   wineserver -w
   kill "$msg" 2>/dev/null
 fi

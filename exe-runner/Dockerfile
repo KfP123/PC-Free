@@ -22,7 +22,15 @@ RUN set -eux; \
       apt-get update; \
       apt-get install -y --no-install-recommends wine wine64 wine32:i386; \
     fi; \
-    apt-get install -y --no-install-recommends cabextract unzip; \
+    apt-get install -y --no-install-recommends cabextract unzip xz-utils; \
+    # Pre-install the Wine Mono version this Wine expects, so .NET programs work
+    # and first-time setup doesn't stop at a download prompt.
+    appwiz="$(find /usr/lib -name appwiz.cpl -path '*wine*' | head -n1)"; \
+    mono_ver="$(grep -aoE 'wine-mono-[0-9]+\.[0-9]+\.[0-9]+' "$appwiz" | head -n1 | sed 's/wine-mono-//')"; \
+    mono_arch="x86"; [ "$TARGETARCH" = "arm64" ] && mono_arch="arm64"; \
+    mkdir -p /usr/share/wine/mono; \
+    curl -fsSL "https://dl.winehq.org/wine/wine-mono/${mono_ver}/wine-mono-${mono_ver}-${mono_arch}.tar.xz" \
+      | tar -xJ -C /usr/share/wine/mono; \
     curl -fsSL -o /usr/local/bin/winetricks \
       https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
     chmod +x /usr/local/bin/winetricks; \
