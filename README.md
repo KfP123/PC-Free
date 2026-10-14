@@ -14,6 +14,8 @@ Run a complete Windows 10 environment in your browser using Docker and GitHub Co
 
 ---
 
+> 📱 **On an iPhone or iPad?** See [IPHONE.md](./IPHONE.md). Creating a Codespace now installs and starts Windows automatically.
+
 ## What is PC-Free?
 
 PC-Free is an open-source project that lets you run Windows 10 directly in your web browser using GitHub Codespaces and Docker. No local installation, no powerful hardware required, completely free.
